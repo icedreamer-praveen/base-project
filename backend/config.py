@@ -65,8 +65,8 @@ STATIC_ROOT  = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Chatbot Engine',
-    'DESCRIPTION': 'Keep on Chatbot Engine!',
+    'TITLE': 'Backend',
+    'DESCRIPTION': 'Keep on Backend!',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
@@ -112,7 +112,7 @@ LOGGING = {
     },
     'formatters': {
         'standard': {
-            'format': '{asctime} {levelname} [chat_engine, {request_id}] : {name}{message}',
+            'format': '{asctime} {levelname} [backend, {request_id}] : {name}{message}',
             'style': '{',
         },
     },
@@ -129,7 +129,7 @@ LOGGING = {
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'when' : 'midnight',
             'interval' : 1,
-            'filename': f'./logs/chat_engine.log',
+            'filename': f'./logs/backend.log',
             'formatter': 'standard',
             'backupCount' : 30,
             # 'maxBytes' : 100* 1024 * 1024,

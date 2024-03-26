@@ -34,9 +34,8 @@ def create_project_dir(project_location, project_name):
     """
     project_path = os.path.join(project_location, project_name)
 
-    # Check if the directory exists and is not empty; prompt for a new name if it is
     while os.path.exists(project_path) and os.listdir(project_path):
-        print("Directory is not empty.")
+        print(f"Project with name {project_name} already exist.")
         project_name = input("Enter a different project name: ")
         project_path = os.path.join(project_location, project_name)
 
@@ -110,13 +109,11 @@ def initialize_project(project_location, project_name):
 
     file_paths = get_file_paths(project_path, project_name)
 
-    # Replace strings in files
     for key, replacement_strings in REPLACE_PATTERNS.items():
         replace_strings_in_file(file_paths[key], {original: project_name for original in replacement_strings})
 
     return file_paths
 
-    # Define file paths for replacements and removals
 def get_file_paths(project_path, project_name):
     """
     The function `get_file_paths` returns a dictionary containing file paths based on the provided

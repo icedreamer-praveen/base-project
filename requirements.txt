@@ -7,4 +7,5 @@ drf-spectacular-sidecar
 mysqlclient
 mysql-connector-python
 python-decouple
+PyYAML
 six

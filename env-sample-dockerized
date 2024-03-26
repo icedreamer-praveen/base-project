@@ -1,0 +1,13 @@
+DATABASE_NAME=backend
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+DATABASE_HOST=postgres_backend
+DATABASE_PORT=5432
+
+DEBUG=True
+ALLOWED_HOSTS='*'
+SECRET_KEY='django secret key'
+SECRET_HEADER='5582c59d-0322-4943-8058-e869a05699eb'
+
+SESSION_COOKIE_DOMAIN='backend.local'
+CACHE_LOCATION='redis://redis_backend:6379/5'

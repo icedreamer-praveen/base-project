@@ -1,0 +1,15 @@
+#save in /etc/systemd/system as backend.service and remove this line
+
+[Unit]
+Description=Short Description
+Requires={project}.socket
+After=network.target
+
+[Service]
+User={user_that_runs_the_service}
+Group=www-data
+WorkingDirectory={project_base_dir}/
+ExecStart={project_base_dir}/venv/bin/gunicorn  --access-logfile - --workers 3 --bind unix:/run/{project}.sock {project_base_folder}.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

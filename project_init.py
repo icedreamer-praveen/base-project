@@ -3,7 +3,7 @@ import shutil
 
 # Constants
 IGNORE_DIRS = ['.git', 'venv', 'mediafiles', 'staticfiles', 'config']
-IGNORE_FILES = ['projectinit.py', 'README.md']
+IGNORE_FILES = ['project_init.py', 'README.md']
 
 
 # Replacement patterns

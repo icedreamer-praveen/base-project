@@ -1,189 +1,91 @@
-#!/bin/python3
 import os
 import shutil
 
+# Constants
+IGNORE_DIRS = ['.git', 'venv', 'mediafiles', 'staticfiles', 'config']
+IGNORE_FILES = ['projectinit.py', 'README.md']
 
-project_location = input("Enter project location: ")
-# project_location = '/home/nabin/Projects/YIL/project-base/'
-project_name = input("Enter project name: ")
 
+# Replacement patterns
+REPLACE_PATTERNS = {
+    'asgi': ["os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')", "ASGI config for backend project."],
+    'wsgi': ["os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')", "WSGI config for backend project."],
+    'manage': ["os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')"],
+    'settings': [
+        "ROOT_URLCONF = 'backend.urls'",
+        "WSGI_APPLICATION = 'backend.wsgi.application'",
+    ]
+}
 
-print('1 : Caching')
-print('2 : Reversions')
-print('2 : ImageResizer')
+def create_project_dir(project_location, project_name):
+    project_path = os.path.join(project_location, project_name)
 
-features = input('Which features you want to keep(enter csv 1,2,3) : ')
+    # Check if the directory exists and is not empty; prompt for a new name if it is
+    while os.path.exists(project_path) and os.listdir(project_path):
+        print("Directory is not empty.")
+        project_name = input("Enter a different project name: ")
+        project_path = os.path.join(project_location, project_name)
 
-project_path = os.path.join(project_location, project_name)
+    os.makedirs(project_path, exist_ok=True)
+    return project_path
 
-if os.path.exists(project_path):
-   if os.listdir(project_path):
-      print("Directory is not empty.")
-      while True:
-         project_name = input("Enter a different project name: ")
-         project_path = os.path.join(project_location, project_name)
-         if not os.path.exists(project_path):
-               break
-         
-os.makedirs(project_path)
-
-ignore_dirs = ['.git', 'venv', 'mediafiles', 'staticfiles']
-
-for filename in os.listdir('.'):
-   file_path = os.path.join('.', filename)
-
-   if os.path.isfile(file_path):
-      shutil.copy(file_path, project_path)
-
-   elif os.path.isdir(file_path):
-      if filename == 'backend':
-         shutil.copytree(file_path, os.path.join(project_path, project_name))
-
-      elif filename in ignore_dirs:
-         continue
-      
-      else:
-         shutil.copytree(file_path, os.path.join(project_path, filename))
-
-print("Project directory created at", project_path)
-
-asgi_path = os.path.join(project_path, project_name, 'asgi.py')
-wsgi_path = os.path.join(project_path, project_name, 'wsgi.py')
-settings_path = os.path.join(project_path, project_name, 'settings.py')
-custom_middleware_path = os.path.join(project_path, project_name, 'custom_middleware.py')
-manage_py_path = os.path.join(project_path, 'manage.py')
-root_urls_path = os.path.join(project_path, project_name, 'urls.py')
-utilis_models_path = os.path.join(project_path, 'utilis', 'models.py')
-utilis_serializers_path = os.path.join(project_path, 'utilis', 'serializers.py')
-utilis_views_path = os.path.join(project_path, 'utilis', 'views.py')
-utilis_admin_path = os.path.join(project_path, 'utilis', 'admin.py')
-
-replace_asg_wsg_manage = [
-   "os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')"
-   ]
-
-replace_pos_settings =  [
-   "'backend.custom_middleware.CacheMiddleware',",
-   "ROOT_URLCONF = 'backend.urls'",
-   "WSGI_APPLICATION = 'backend.wsgi.application'",
-   ]
-
-replace_pos_custom =  [
-   "cache_key = f'backend:{key}",
-   "name = f'backend:{queryset.model.__module__}_{queryset.model.__name__}'"
-   ]
+def copy_project_files(source, dest, project_name=None):
+    for filename in os.listdir(source):
+        if filename in IGNORE_FILES:
+            continue
+        file_path = os.path.join(source, filename)
+        if os.path.isfile(file_path):
+            shutil.copy(file_path, dest)
+        elif os.path.isdir(file_path) and filename not in IGNORE_DIRS:
+            if filename == 'backend':
+                shutil.copytree(file_path, os.path.join(dest, project_name))
+            else:
+                shutil.copytree(file_path, os.path.join(dest, filename))
 
 def replace_strings_in_file(filepath, replace_strings):
-   with open(filepath, 'r') as f:
-      file_lines = f.readlines()
+    with open(filepath, 'r') as f:
+        file_lines = f.readlines()
 
-   for i, line in enumerate(file_lines):
-      for replace_string in replace_strings:
-         if replace_string in line:
-               new_line = line.replace('backend', project_name)
-               file_lines[i] = new_line
+    for i, line in enumerate(file_lines):
+        for original, replacement in replace_strings.items():
+            if original in line:
+                file_lines[i] = line.replace('backend', replacement)
+    with open(filepath, 'w') as f:
+        f.writelines(file_lines)
 
-   with open(filepath, 'w') as f:
-      f.writelines(file_lines)
+def initialize_project(project_location, project_name):
+    project_path = create_project_dir(project_location, project_name)
+    copy_project_files('.', project_path, project_name=project_name)
 
-replace_strings_in_file(settings_path, replace_pos_settings)
-replace_strings_in_file(custom_middleware_path, replace_pos_custom)
-replace_strings_in_file(asgi_path, replace_asg_wsg_manage)
-replace_strings_in_file(wsgi_path, replace_asg_wsg_manage)
-replace_strings_in_file(manage_py_path, replace_asg_wsg_manage)
+    file_paths = get_file_paths(project_path, project_name)
 
+    # Replace strings in files
+    for key, replacement_strings in REPLACE_PATTERNS.items():
+        replace_strings_in_file(file_paths[key], {original: project_name for original in replacement_strings})
 
-def remove_blocks_from(filepath, start, end):
-   with open(filepath, 'r') as file:
-      lines = file.readlines()
+    return file_paths
 
-   with open(filepath, 'w') as file:
-      inside_block = False
-      for line in lines:
-         if start in line:
-               inside_block = True
-         elif end in line:
-               inside_block = False
-         elif not inside_block:
-               file.write(line)
+    # Define file paths for replacements and removals
+def get_file_paths(project_path, project_name):
+    return {
+        'asgi': os.path.join(project_path, project_name, 'asgi.py'),
+        'wsgi': os.path.join(project_path, project_name, 'wsgi.py'),
+        'settings': os.path.join(project_path, project_name, 'settings.py'),
+        'manage': os.path.join(project_path, 'manage.py'),
+        'root_urls': os.path.join(project_path, project_name, 'urls.py'),
+        'utilis_models': os.path.join(project_path, 'utilis', 'models.py'),
+        'utilis_serializers': os.path.join(project_path, 'utilis', 'serializers.py'),
+        'utilis_views': os.path.join(project_path, 'utilis', 'views.py'),
+        'utilis_admin': os.path.join(project_path, 'utilis', 'admin.py'),
+    }
 
+def main():
+    project_location = input("Enter project location: ")
+    project_name = input("Enter project name: ")
 
-def remove_lines(filepath, remove_list):
-   with open(filepath, 'r') as file:
-      lines = file.readlines()
+    initialize_project(project_location, project_name)
 
-   with open(filepath, 'w') as file:
-      for line in lines:
-         if not any(remove_str in line for remove_str in remove_list):
-               file.write(line)
+    print(f"Project {project_name} created at {project_location}")
 
-
-if len(features) <= 0:
-   exit()
-
-choices = features.split(',')
-
-if '1' not in choices:
-   print('Removing Caching')
-   os.remove(custom_middleware_path)
-   remove_blocks_from(settings_path, '##CACHINGs##', '##CACHINGe##')
-   print('Removed Caching')
-
-
-if '2' not in choices:
-
-   settings_remove_list = [
-      "'reversion.middleware.RevisionMiddleware',",
-      "'reversion',"
-   ]
-   urls_remove_list = [
-      "from utilis.views import GetHistroy",
-      "router.register('history', GetHistroy, 'history')"
-   ]
-
-   admin_remove_list = [
-      'import json',
-      'from reversion.admin import VersionAdmin',
-      'from reversion.models import Revision, Version',
-      'admin.site.register(DummyModel, VersionAdmin)'
-   ]
-
-   serializer_remove_list = [
-      'from reversion.models import Revision',
-   ]
-
-   print('Removing Reversions')
-   remove_lines(settings_path, settings_remove_list)
-   remove_lines(root_urls_path, urls_remove_list)
-   remove_lines(utilis_admin_path, admin_remove_list)
-   remove_lines(utilis_serializers_path, serializer_remove_list)
-   remove_blocks_from(utilis_models_path, '##reversions#', '##reversione#')
-   remove_blocks_from(utilis_serializers_path, '##reversions#', '##reversione#')
-   remove_blocks_from(utilis_views_path, '##reversions#', '##reversione#')
-   remove_blocks_from(utilis_admin_path, '##reversions#', '##reversione#')
-   print('Removed Reversions')
-
-
-urls_remove_list = [
-   "from utilis.views import thumbnails",
-	"re_path(r'thumbnails/mediafiles/', thumbnails)"
-]
-
-views_remove_list = [
-   "import os",
-   "from django.http import HttpResponse",
-   "from PIL import Image"
-]
-
-serializer_remove_list = [
-   "from django.db.models.fields.files import ImageField",
-]
-
-if '3' not in choices:
-   print('Removing imageresizer')
-   remove_lines(root_urls_path, urls_remove_list)
-   remove_lines(utilis_views_path, views_remove_list)
-   remove_lines(utilis_serializers_path, serializer_remove_list)
-   remove_blocks_from(utilis_views_path, '##imageresizers##', '##imageresizere##')
-   remove_blocks_from(utilis_serializers_path, '##imageresizers##', '##imageresizere##')
-   print('Removed imageresizer')
+if __name__ == "__main__":
+    main()

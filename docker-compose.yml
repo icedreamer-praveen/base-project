@@ -1,53 +1,16 @@
-version: '3.3'
+version: '3.7'
 
 services:
-  postgres_backend:
-    container_name: postgres_backend
-    image: postgis/postgis
-    environment:
-      - POSTGRES_DB=backend
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    ports:
-      - "5423:5432"
-    networks:
-      - default
-      - pgnetwork
-      
-  redis_backend:
-    container_name: redis_backend
-    image: redis:alpine
-    volumes:
-      - redis-data:/data
-
-  backend:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: backend
-    image: app:backend
-    build: .
     ports:
-      - "8004:8004"
-    command: >
-      sh -c "python manage.py makemigrations &&
-            python manage.py migrate &&
-            python manage.py collectstatic --no-input &&
-            python manage.py runserver 0.0.0.0:8004"
+      - 8000:8000
     volumes:
-      - static:/static
-      - .:/code
-    env_file:
-      - .env
-    depends_on:
-      - postgres_backend
-      - redis_backend
+      - ./config/application-dev.yml:/app/config/application-dev.yml
+      - type: bind
+        source: ./logs
+        target: /app/logs
     restart: always
-
-volumes:
-  static:
-  postgres-data:
-  redis-data:
-
-networks:
-  default:
-  pgnetwork:

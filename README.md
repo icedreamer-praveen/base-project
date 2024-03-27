@@ -11,3 +11,7 @@
 - 1. Install [docker](https://get.docker.com/) and [docker-compose](https://docs.docker.com/compose/install/)
 - 2. Run the server docker-compose up -d
 ```
+
+## Guidelines
+- 1. Update in SPECTACULAR_SETTINGS title and description
+- 2. Update in LOGGING format and filename

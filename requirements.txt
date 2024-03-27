@@ -4,6 +4,7 @@ django-log-request-id
 djangorestframework
 drf-spectacular
 drf-spectacular-sidecar
+feedparser
 mysqlclient
 mysql-connector-python
 python-decouple

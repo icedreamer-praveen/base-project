@@ -27,8 +27,7 @@ def initialize_project(project_location, project_name):
         replace_strings_in_file(file_paths[key], {original: project_name for original in replacement_strings})
 
     # New feature implementation
-    print('y/n: Prometheus')
-    features = input('Do you want to add prometheus?: ')
+    features = input('Do you want to add prometheus? y/n: ')
     if features == "y":
         add_prometheus_config(project_path, project_name)
 

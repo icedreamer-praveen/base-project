@@ -11,7 +11,7 @@ def add_prometheus_config(project_path, project_name):
     # Add 'django-prometheus' and 'prometheus_client' to requirements.txt
     requirements_path = os.path.join(project_path, 'requirements.txt')
     with open(requirements_path, 'a') as f:
-        f.write('django-prometheus\nprometheus_client\n')
+        f.write('psutil\ndjango-prometheus\nprometheus_client\n')
 
     # Insert 'django_prometheus' into THIRD_PARTY_APPS in settings.py
     settings_path = os.path.join(project_path, project_name, 'settings.py')

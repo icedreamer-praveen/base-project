@@ -7,7 +7,5 @@ drf-spectacular-sidecar
 feedparser
 mysqlclient
 mysql-connector-python
-python-decouple
-psutil
 PyYAML
 six

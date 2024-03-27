@@ -159,7 +159,7 @@ from django.urls import path
 
 from .views import health_check, prometheus_metrics
 
-urlpatterns += [
+urlpatterns = [
     path("actuator/health/livenessState", health_check),
     path("actuator/prometheus", prometheus_metrics, name="prometheus_metrics"), 
 ]

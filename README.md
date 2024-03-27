@@ -17,3 +17,16 @@
 2. Update in LOGGING format and filename
 3. Replace backend keyword with your project name in Jenkins file
 - For Example: select backend keyword and enter keyboard shortcut ``ctrl+shift+L `` then replace with your project name.
+
+## <<<< Backend with bolier plate codes >>>>
+
+## Features
+## Prometheus:
+   ```Description : Django-Prometheus
+
+                    This library contains code to expose some monitoring metrics relevant to Django internals so they can be monitored by Prometheus.io.
+
+    in files : backend > settings.py > THIRD_PARTY_APPS, MIDDLEWARE
+              utilis > views.py, urls.py
+              requirements.txt
+```

@@ -1,0 +1,12 @@
+.git
+.gitignore
+.vscode
+logs/
+docker_logs
+*.log
+.env
+.config
+*.sqlite
+*.db
+*.backup
+README.md

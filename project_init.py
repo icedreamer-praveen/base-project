@@ -2,7 +2,7 @@ import os
 import shutil
 
 # Constants
-IGNORE_DIRS = ['.git', 'venv', 'mediafiles', 'staticfiles', 'config']
+IGNORE_DIRS = ['.git', 'venv', 'mediafiles', 'staticfiles']
 IGNORE_FILES = ['project_init.py', 'README.md']
 
 

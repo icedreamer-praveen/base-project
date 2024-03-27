@@ -1,22 +1,13 @@
 django:
   DEBUG: 'True'
-  SECRET_KEY: django-insdafreaecure-e4=w0bqtewk*km*b$slao+3m$c=f4f3*t+2izpqe*fd1w+i&lnz6m8q5
+  SECRET_KEY: django-insecure-e4=w0bqtewk*km*b$slao+3m$c=f4f3*t+2izpqe*fd1w+i&lnz6m8q5 
   
 datasource:
-  # DATABASE_ENGINE: django.db.backends.mysql
-  # DATABASE_HOST: 10.13.194.238
-  # DATABASE_NAME: fnxt_knowledgebase_dev
-  # DATABASE_USER: fonenxt
-  # DATABASE_PASS: f1s0ft@123
-  # DATABASE_PORT: '3311'
-  # TIME_ZONE: "+05:45"
-  # AUTH_PLUGIN: mysql_native_password
-
   DATABASE_ENGINE: django.db.backends.mysql
   DATABASE_HOST: localhost
-  DATABASE_NAME: FoneNxtKnowledgeBase
-  DATABASE_USER: prabin
-  DATABASE_PASS: prabin
+  DATABASE_NAME: db_name
+  DATABASE_USER: db_user
+  DATABASE_PASS: db_pass
   DATABASE_PORT: '3306'
   TIME_ZONE: "+05:45"
   AUTH_PLUGIN: mysql_native_password

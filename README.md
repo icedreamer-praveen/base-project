@@ -13,5 +13,7 @@
 ```
 
 ## Guidelines
-- 1. Update in SPECTACULAR_SETTINGS title and description
-- 2. Update in LOGGING format and filename
+1. Update in SPECTACULAR_SETTINGS title and description
+2. Update in LOGGING format and filename
+3. Replace backend keyword with your project name in Jenkins file
+- For Example: select backend keyword and enter keyboard shortcut ``ctrl+shift+L `` then replace with your project name.

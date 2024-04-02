@@ -1,7 +1,8 @@
+from helper.django_extension import add_django_ext_config
+from helper.prometheus import add_prometheus_config
 from initialize_helper import (REPLACE_PATTERNS, copy_project_files,
                                create_project_dir, get_file_paths,
                                replace_strings_in_file)
-from prometheus import add_prometheus_config
 
 
 def initialize_project(project_location, project_name):
@@ -27,9 +28,13 @@ def initialize_project(project_location, project_name):
         replace_strings_in_file(file_paths[key], {original: project_name for original in replacement_strings})
 
     # New feature implementation
-    features = input('Do you want to add prometheus? y/n: ')
-    if features == "y":
+    promethues_features = input('Do you want to add prometheus? y/n: ')
+    if promethues_features == "y":
         add_prometheus_config(project_path, project_name)
+        
+    ext_features = input('Do you want to add django_extension? y/n: ')
+    if ext_features == "y":
+        add_django_ext_config(project_path, project_name)
 
     return file_paths
 

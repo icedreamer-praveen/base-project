@@ -1,8 +1,8 @@
 import os
 import shutil
 
-IGNORE_DIRS = ['.git', 'venv', 'mediafiles', 'staticfiles', '__pycache__']
-IGNORE_FILES = ['project_init.py', 'README.md', 'prometheus.py', 'initialize_helper.py']
+IGNORE_DIRS = ['.git', 'venv', 'mediafiles', 'staticfiles', 'helper', '__pycache__']
+IGNORE_FILES = ['project_init.py', 'README.md', 'initialize_helper.py']
 
 
 # Replacement patterns

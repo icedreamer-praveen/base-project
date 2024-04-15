@@ -1,6 +1,6 @@
 django:
   DEBUG: True
-  SECRET_KEY: django-insecure-e4=w0bqtewk*km*b$slao+3m$c=f4f3*t+2izpqe*fd1w+i&lnz6m8q5 
+  SECRET_KEY: '' 
   
 datasource:
   DATABASE_ENGINE: django.db.backends.mysql

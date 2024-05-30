@@ -13,10 +13,16 @@ def load_config(base_dir):
     for config_dir in config_dirs:
         dir_path = os.path.join(base_dir, config_dir)
         config_file = os.path.join(dir_path, 'application-dev.yml')
-        if not config_file:
+        if os.path.exists(config_file):
+            with open(config_file, 'r') as file:
+                config = yaml.safe_load(file)
+            return config
+        else:
             if os.path.exists(dir_path):
-                if any(file.endswith('.yml') for file in os.listdir(dir_path)):
-                    config_file = next(file for file in os.listdir(dir_path) if file.endswith('.yml'))
-        with open(os.path.join(dir_path, config_file), 'r') as file:
-            config = yaml.safe_load(file)
-        return config
+                files = [file for file in os.listdir(dir_path) if file.endswith('.yml')]
+                if files:
+                    config_file = os.path.join(dir_path, files[0])
+                    with open(config_file, 'r') as file:
+                        config = yaml.safe_load(file)
+                    return config
+    return None
